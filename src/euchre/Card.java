@@ -28,7 +28,7 @@ public class Card {
         return suit;
     }
     public String getSuitString() {
-        return cardSuit[suit] + ".png";
+        return cardSuit[suit];
     }
     public int getValue() {
         return value;
