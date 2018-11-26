@@ -140,7 +140,7 @@ public class Player {
         if(ledSuit.isEmpty() || ledSuit.equals(hand.get(a).getSuitString())) //Checks to see if selected card matches led suit
             return true;
         for(int i=0;i<5;i++) { //Checks if any cards in hand match led suit
-            if(!played[a] && ledSuit.equals(hand.get(a).getSuitString())) //If any cards not yet played match led suit, returns false
+            if(!played[i] && ledSuit.equals(hand.get(i).getSuitString())) //If any cards not yet played match led suit, returns false
                 return false;
         }
         return true; //If no cards match led suit, return true
