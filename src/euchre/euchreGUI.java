@@ -472,6 +472,7 @@ public class euchreGUI extends javax.swing.JFrame {
 
     private void trumpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trumpButtonActionPerformed
         if(game.getState().equals("Pick it up")) { //Shown card suit becomes trump
+            System.out.println("Attempting to make trump suit " + game.getShownCard().getSuitString()); //Remove after debugging
             newTrumpInfo(game.getShownCard().getSuitString()); //Shown card suit becomes trump label
             game.getRound().setTrump(game.getShownCard().getSuitString());
             updateMessageLabel("You have chosen \"Pick it up\"");

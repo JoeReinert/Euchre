@@ -268,7 +268,7 @@ public class Game {
         System.out.println("Now in \"Play\" Phase"); //Remove after debugged
         ActionListener taskPerformed = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if(playerTeam.getTrickCount()+oppTeam.getTrickCount()<5) { //Checks if 5 tricks have been taken yet, signaling the end of the round
+                if((playerTeam.getTrickCount() + oppTeam.getTrickCount())<5) { //Checks if 5 tricks have been taken yet, signaling the end of the round
                     if(playCount<4) { //Checks if every player has played in the trick
                         playCard(); //Runs logic for selecting card to play for each player
                         if(waiting) { //If the current position is at the player, exit the timer until they have selected a card
