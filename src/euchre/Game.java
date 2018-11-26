@@ -117,6 +117,7 @@ public class Game {
                         firstTimer.stop();
                         state = "Playing"; //State changes for logic in other methods
                         round.setCurrentPosition(round.getLeaderPosition()); //Resets current position to appropriate place
+                        changeJackValues();
                         playLoop();
                     }
                     if(waiting) //Stops timer if player is the one making the choice

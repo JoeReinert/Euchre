@@ -55,6 +55,7 @@ public class Trick {
                     break;
             }
             winningCard = c;
+            System.out.println("Current winning card: " + winningCard.toString()); //Remove after debugging
         }
     }
     public boolean checkAgainstLeader(Card c) { //Determines if the card played is of higher value than the current winning card
