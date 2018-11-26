@@ -86,7 +86,8 @@ public class Game {
         gui.updateDealer();
         gui.redrawTable();
         gui.setVisible(true);
-        gui.setAlwaysOnTop(true);
+        gui.setAlwaysOnTop(true); //For some reason, the window doesn't appear on top when set to visible
+        gui.setAlwaysOnTop(false); //So, these two statements set the window to be on top
         round.getTrick().setTeams(playerTeam, oppTeam);
         passOrPlay();
 

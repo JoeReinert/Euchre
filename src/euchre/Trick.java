@@ -68,7 +68,7 @@ public class Trick {
             else
                 return true; //Return true if the winning card is not a trump card
         }
-        else if(winningCard.getSuitString().equals(suitLed)) //If the card played matches the suit of the suit that was led
+        else if(c.getSuitString().equals(suitLed) && !winningCard.getSuitString().equals(trump)) //If the card played matches the suit of the suit that was led and the winning card is not a trump card
             return c.getValue()>winningCard.getValue();  //Return true if the card played is a higher value card
         else
             return false; //Return false if card meets none of the above criteria
