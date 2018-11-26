@@ -672,7 +672,6 @@ public class euchreGUI extends javax.swing.JFrame {
                 updateMessageLabel("You played the " + game.getPlayerCard(a).toString());
                 playerPlayedCardIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getPlayerCard(a).getImage())));
                 game.getPlayerTeam().getPlayer1().removeCard(a);
-                game.playerPassed();
                 game.playerPlayed();
                 game.setWaiting(false);
                 game.playLoop();
@@ -703,7 +702,7 @@ public class euchreGUI extends javax.swing.JFrame {
             game.getPlayerTeam().getPlayer1().getCard(a).setValue(game.getRound().getShownCard().getValue());
             discardDraw();
             game.setState("Playing");
-            game.playerPassed();
+            game.getRound().setCurrentPosition(game.getRound().getLeaderPosition());
             game.setWaiting(false);
             game.playLoop();
         }   
