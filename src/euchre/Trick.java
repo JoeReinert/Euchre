@@ -35,6 +35,9 @@ public class Trick {
     public String getSuitLed() {
         return suitLed;
     }
+    public Card getWinningCard() {
+        return winningCard;
+    }
     public void playCard(int position, Card c) {
         if(checkAgainstLeader(c)) {
             switch(position) {
@@ -69,5 +72,10 @@ public class Trick {
             return c.getValue()>winningCard.getValue();  //Return true if the card played is a higher value card
         else
             return false; //Return false if card meets none of the above criteria
+    }
+    public void reset() {
+        winningCard = null;
+        suitLed = "";
+        leader = null;
     }
 }

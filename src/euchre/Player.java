@@ -42,8 +42,11 @@ public class Player {
         played[a] = true;
     }
     public void reset() {
-        hand.clear();
-        played = new boolean[] {false,false,false,false,false};
+        hand.clear(); //Clears cards from hand
+        played = new boolean[] {false,false,false,false,false}; //Sets all cards in hand to not played
+    }
+    public void setCard(Card c, int a) {
+        hand.set(a, c);
     }
     public String selectTrump() {
         if(difficulty==1) { //Easy difficulty will randomly select a trump suit

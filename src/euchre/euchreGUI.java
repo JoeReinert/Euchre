@@ -471,12 +471,12 @@ public class euchreGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_passButtonActionPerformed
 
     private void trumpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trumpButtonActionPerformed
+        game.getPlayerTeam().calledTrump();
         if(game.getState().equals("Pick it up")) { //Shown card suit becomes trump
             System.out.println("Attempting to make trump suit " + game.getShownCard().getSuitString()); //Remove after debugging
             newTrumpInfo(game.getShownCard().getSuitString()); //Shown card suit becomes trump label
             game.getRound().setTrump(game.getShownCard().getSuitString());
             updateMessageLabel("You have chosen \"Pick it up\"");
-            disableButtons(); 
             if(game.getRound().getDealerPosition()!=1) //If the dealer is a computer, don't trigger the waiting boolean
                 game.setWaiting(false);
             else //If the dealer is the player, set to waiting so they may discard from their hand
@@ -508,9 +508,7 @@ public class euchreGUI extends javax.swing.JFrame {
                 default:
                     break;
             }
-        }
-        game.getPlayerTeam().calledTrump();
-        game.getRound().setTrump(game.getShownCard().getSuitString());
+        }        
         disableButtons();
     }//GEN-LAST:event_trumpButtonActionPerformed
 
@@ -697,30 +695,35 @@ public class euchreGUI extends javax.swing.JFrame {
                     playerCard5Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
                     break;
             }
-            game.getPlayerTeam().getPlayer1().removeCard(a); //Discards selected card from hand
-            game.getPlayerTeam().getPlayer1().getCard(a).setSuit(game.getRound().getShownCard().getSuit()); 
-            game.getPlayerTeam().getPlayer1().getCard(a).setValue(game.getRound().getShownCard().getValue());
-            discardDraw();
-            game.setState("Playing");
-            game.getRound().setCurrentPosition(game.getRound().getLeaderPosition());
-            game.setWaiting(false);
-            game.playLoop();
+            game.getPlayerTeam().getPlayer1().setCard(game.getRound().getShownCard(), a); //Replaces selected card in hand with shown card on deck
+            discardDraw(); //Redraws shown card as flipped over
+            game.setWaiting(false); //Sets waiting to false so timer can execute
+            game.passOrPlay();
         }   
     }
     public void suitSelected(int a) {
-        int trumpSuit;
+        int trumpSuit = 0;
         int shownSuit = game.getRound().getShownCard().getSuit();
-        if(shownSuit == a) {
-            trumpSuit = shownSuit + 1;
-        }
-        else if(shownSuit < a) {
-            trumpSuit = a + 1;
-        }
-        else if(a == 0) {
-            trumpSuit = 0;
-        }
-        else
-            trumpSuit = shownSuit;
+        switch(shownSuit) {
+            case 0:
+                trumpSuit = a + 1;
+                break;
+            case 1:
+                if(a==0)
+                    trumpSuit = 0;
+                else
+                    trumpSuit = a + 1;
+                break;
+            case 2:
+                if(a<2)
+                    trumpSuit = a;
+                else
+                    trumpSuit = 3;
+                break;
+            case 3:
+                trumpSuit = a;
+                break;
+        }        
         String trumpSuitString = "";
         switch(trumpSuit) {
             case 0:

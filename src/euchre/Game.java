@@ -198,20 +198,20 @@ public class Game {
         }
         playerPassed();
     }
-    public void pickItUp() {
+    public void pickItUp() { //Logic for getting dealer of the round to discard a card from their hand
         switch(round.getDealerPosition()) {
-            case 1:
+            case 1: //Player is the dealer and must discard
                 gui.updateMessageLabel("Please select a card to discard");
                 state = "Discarding";
                 waiting = true;
                 return;
-            case 2:
+            case 2: //Opponent 1 must discard
                 oppTeam.getPlayer1().discardCard(round.getShownCard(), round.getTrump());
                 break;
-            case 3:
+            case 3: //Partner must discard
                 playerTeam.getPlayer2().discardCard(round.getShownCard(), round.getTrump());
                 break;
-            case 4:
+            case 4: //Opponent 2 must discard
                 oppTeam.getPlayer2().discardCard(round.getShownCard(), round.getTrump());
                 break;   
         }
@@ -233,6 +233,7 @@ public class Game {
             case 2: //Opponent 1
                 if(rand.nextInt(10)==0) {     
                     round.setTrump(oppTeam.getPlayer1().selectTrump());
+                    oppTeam.calledTrump();
                     gui.newTrumpInfo(round.getTrump());
                     gui.updateMessageLabel("Opponent 1 chose " + round.getTrump() + " as trump");
                     return;
@@ -243,6 +244,7 @@ public class Game {
             case 3: //Partner
                 if(rand.nextInt(10)==0) {
                     round.setTrump(playerTeam.getPlayer2().selectTrump());
+                    playerTeam.calledTrump();
                     gui.newTrumpInfo(round.getTrump());
                     gui.updateMessageLabel("Partner chose " + round.getTrump() + " as trump");
                     return;
@@ -253,6 +255,7 @@ public class Game {
             case 4: //Opponent 2
                 if(rand.nextInt(10)==0){ 
                     round.setTrump(oppTeam.getPlayer2().selectTrump());
+                    oppTeam.calledTrump();
                     gui.newTrumpInfo(round.getTrump());
                     gui.updateMessageLabel("Opponent 2 chose " + round.getTrump() + " as trump");
                     return;
@@ -279,15 +282,30 @@ public class Game {
                     }
                     else { //Every player has played a card in the trick
                         int p = round.getTrickWinner().getPosition(); //Determines which team gets the trick from winner position p
-                        if(p%2==1)
-                            playerTeam.takeTrick(); //Player team trick count will increase
-                        else
-                            oppTeam.takeTrick(); //Opposing team trick count will increase
+                        switch(p) {
+                            case 1:
+                                playerTeam.takeTrick(); //Player team trick count will increase
+                                gui.updateMessageLabel("You take the trick with the " + round.getTrick().getWinningCard().toString());
+                                break;
+                            case 2:
+                                oppTeam.takeTrick(); //Opponent team trick count will increase
+                                gui.updateMessageLabel("Opponent 1 takes the trick with the " + round.getTrick().getWinningCard().toString());
+                                break;
+                            case 3:
+                                playerTeam.takeTrick(); //Player team trick count will increase
+                                gui.updateMessageLabel("Your partner takes the trick with the " + round.getTrick().getWinningCard().toString());
+                                break;
+                            case 4:
+                                oppTeam.takeTrick(); //Opponent team trick count will increase
+                                gui.updateMessageLabel("Opponent 2 takes the trick with the " + round.getTrick().getWinningCard().toString());
+                                break;
+                        }
                         gui.updateTrickCounts();
                         gui.clearPlayedCards();
                         round.setLeaderPosition(p); //Winner of this trick is leader of next trick
                         round.setCurrentPosition(p); //Also needs to be set to current position
                         playCount = 0; //Reset playCount for next trick
+                        round.getTrick().reset();
                     }
                 }                 
                 else { //A team has won the round
