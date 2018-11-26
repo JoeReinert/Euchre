@@ -472,7 +472,7 @@ public class euchreGUI extends javax.swing.JFrame {
 
     private void trumpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trumpButtonActionPerformed
         if(game.getState().equals("Pick it up")) { //Shown card suit becomes trump
-            newTrumpInfo("/euchre/" + game.getShownCard().getSuitString()); //Shown card suit becomes trump label
+            newTrumpInfo(game.getShownCard().getSuitString()); //Shown card suit becomes trump label
             game.getRound().setTrump(game.getShownCard().getSuitString());
             updateMessageLabel("You have chosen \"Pick it up\"");
             disableButtons(); 
@@ -585,12 +585,12 @@ public class euchreGUI extends javax.swing.JFrame {
     }
     
     public void updateScores() {
-        yourScoreLabel.setText("Your Score: " + game.getPlayerTeamScore());
-        oppScoreLabel.setText("Opp Score: " + game.getOppTeamScore());
+        yourScoreLabel.setText("Your Score: " + game.getPlayerTeam().getScore());
+        oppScoreLabel.setText("Opp Score: " + game.getOppTeam().getScore());
     }
     public void updateTrickCounts() {
-        yourTrickCountLabel.setText("Your Trick Count: " + game.getPlayerTrickCount());
-        oppTrickCountLabel.setText("Opp Trick Count: " + game.getOppTrickCount());
+        yourTrickCountLabel.setText("Your Trick Count: " + game.getPlayerTeam().getTrickCount());
+        oppTrickCountLabel.setText("Opp Trick Count: " + game.getOppTeam().getTrickCount());
     }
     public void redrawTable() {
         playerCard1Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getPlayerCard(0).getImage())));
@@ -672,9 +672,9 @@ public class euchreGUI extends javax.swing.JFrame {
                 playerPlayedCardIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getPlayerCard(a).getImage())));
                 game.getPlayerTeam().getPlayer1().removeCard(a);
                 game.playerPassed();
-                game.iteratePlayCount();
+                game.playerPlayed();
                 game.setWaiting(false);
-                game.play();
+                game.playLoop();
             }
             else
                 updateMessageLabel("Please pick a different card");
@@ -704,7 +704,7 @@ public class euchreGUI extends javax.swing.JFrame {
             game.setState("Playing");
             game.playerPassed();
             game.setWaiting(false);
-            game.play();
+            game.playLoop();
         }   
     }
     public void suitSelected(int a) {

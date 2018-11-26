@@ -10,20 +10,14 @@ package euchre;
  * @author Joe
  */
 public class Trick {
-    private Card playerCard;
-    private Card opp1Card;
-    private Card partnerCard;
-    private Card opp2Card;
     private String trump;
     private String suitLed;
     private Team playerTeam;
     private Team oppTeam;
     private Player leader;
     private Card winningCard;
-    private final Round round;
     
-    public Trick(Round r) {
-        round = r;
+    public Trick() {
         suitLed = "";
     }
     //Mutators
@@ -42,20 +36,6 @@ public class Trick {
         return suitLed;
     }
     public void playCard(int position, Card c) {
-        switch(position) {
-            case 1:
-                playerCard = c;
-                break;
-            case 2:
-                opp1Card = c;
-                break;
-            case 3:
-                partnerCard = c;
-                break;
-            case 4:
-                opp2Card = c;
-                break;
-        }
         if(checkAgainstLeader(c)) {
             switch(position) {
                 case 1:

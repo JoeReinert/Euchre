@@ -25,7 +25,7 @@ public class Round {
         else
             leaderPosition = 1;
         currentPosition = leaderPosition;
-        trick = new Trick(this);
+        trick = new Trick();
     }
     
     public void setTrump(String s) {

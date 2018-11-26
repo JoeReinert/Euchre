@@ -29,14 +29,12 @@ public class Player {
     public Card getCard(int i) {
        return hand.get(i);
     }
-    
     public boolean getPlayed(int i) {
         return played[i];
     }
     public int getPosition() {
         return position;
-    }
-    
+    }  
     public void setPosition(int a) {
         position = a;
     }
@@ -167,6 +165,6 @@ public class Player {
     }
     public void replaceCard(int a, Card c) { //Logic for human player choosing a card to replace
         hand.set(a, c);
-        System.out.println("Card " + a + " replaced with the " + c.toString());
+        System.out.println("Card " + a + " replaced with the " + c.toString()); //Remove after debugging
     }
 }

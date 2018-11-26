@@ -34,7 +34,7 @@ public class Card {
         return value;
     }
     public String getImage() {
-        if(value!=6) //Standard image draw
+        if(value!=6) //Standard image draw 
             return "/euchre/" + cardValue[value] + cardSuit[suit] + ".png";
         else { //Because the 2nd Jack changes suit, this becomes necessary to draw it correctly once its played
             switch(suit) {
@@ -44,7 +44,7 @@ public class Card {
                     return "/euchre/" + cardValue[value] + "Hearts.png";
                 case 2: //Jack of Diamonds when Hearts is trump
                     return "/euchre/" + cardValue[value] + "Diamonds.png";
-                case 3: //Jack of Spades when CLubs is trump
+                case 3: //Jack of Spades when Clubs is trump
                     return "/euchre/" + cardValue[value] + "Spades.png";
             }
         }

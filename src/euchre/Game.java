@@ -41,18 +41,6 @@ public class Game {
     public Team getOppTeam() {
         return oppTeam;
     }
-    public int getPlayerTeamScore() {
-        return playerTeam.getScore();
-    }
-    public int getOppTeamScore() {
-        return oppTeam.getScore();
-    }
-    public int getPlayerTrickCount() {
-        return playerTeam.getTrickCount();
-    }
-    public int getOppTrickCount() {
-        return oppTeam.getTrickCount();
-    }
     public Card getPlayerCard(int a) {
         return playerTeam.getPlayer1().getCard(a);
     }
@@ -78,9 +66,7 @@ public class Game {
     public void setState(String s) {
         state = s;
     }
-    public void setPassCount(int a) {
-        passCount = a;
-    }
+
     //Methods
     public void startGame(int partnerDifficulty, int opp1Difficulty, int opp2Difficulty) {
         Player player = new Player(0);
@@ -98,6 +84,7 @@ public class Game {
         gui.updateDealer();
         gui.redrawTable();
         gui.setVisible(true);
+        gui.setAlwaysOnTop(true);
         passCount = 0;
         playCount = 0;
         round.getTrick().setTeams(playerTeam, oppTeam);
@@ -114,7 +101,7 @@ public class Game {
                         firstTimer.stop();
                         state = "Playing"; //State changes for logic in other methods
                         round.setCurrentPosition(round.getLeaderPosition()); //Resets current position to appropriate place
-                        play();
+                        playLoop();
                     }
                     if(waiting) //Stops timer if player is the one making the choice
                         firstTimer.stop();
@@ -128,7 +115,7 @@ public class Game {
                         firstTimer.stop();
                         state = "Playing"; //State changes for logic in other methods
                         round.setCurrentPosition(round.getLeaderPosition()); //Resets current position to appropriate place
-                        play();
+                        playLoop();
                     }
                     if(waiting) //Stops timer if player is the one making the choice
                         firstTimer.stop();
@@ -276,57 +263,48 @@ public class Game {
         }
         playerPassed();
     }
-    public void play() { //Main loop for the game
+    public void playLoop() { //Main loop for the game
+        int playLoopDelay = 2000;
         System.out.println("Now in \"Play\" Phase"); //Remove after debugged
         ActionListener taskPerformed = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(playerTeam.getTrickCount()+oppTeam.getTrickCount()<5) { //Checks if 5 tricks have been taken yet, signaling the end of the round
                     if(playCount<4) { //Checks if every player has played in the trick
-                        if(round.getCurrentPosition()!=1) { //If the current player is a computer
-                            System.out.println("Play Count: " + playCount + " Current Position: " + round.getCurrentPosition()); //Remove after debugged
-                            computerPlay(); //Run logic for computer to select a card to play
-                            playCount++;
-                        }
-                        else {
-                            playTimer.stop();
+                        playCard(); //Runs logic for selecting card to play for each player
+                        if(waiting) { //If the current position is at the player, exit the timer until they have selected a card
+                            playTimer.stop(); 
                             gui.updateMessageLabel("Please select a card to play");
-                            waiting = true;
-                            return;
-                        }
-                        if(waiting) {
-                            playTimer.stop();
                             return;
                         }
                     }
                     else { //Every player has played a card in the trick
-                        playCount = 0; //Reset playCount for next trick
                         int p = round.getTrickWinner().getPosition(); //Determines which team gets the trick from winner position p
-                        round.setLeaderPosition(p); //Winner of this trick is leader of next trick
-                        round.setCurrentPosition(p); //Also needs to be set to current position
                         if(p%2==1)
                             playerTeam.takeTrick(); //Player team trick count will increase
                         else
                             oppTeam.takeTrick(); //Opposing team trick count will increase
                         gui.updateTrickCounts();
                         gui.clearPlayedCards();
+                        round.setLeaderPosition(p); //Winner of this trick is leader of next trick
+                        round.setCurrentPosition(p); //Also needs to be set to current position
+                        playCount = 0; //Reset playCount for next trick
                     }
-                    if(waiting) //Exits timer until player selects card to play
-                        playTimer.stop();
                 }                 
                 else { //A team has won the round
-                    endOfRound();
                     playTimer.stop();
+                    endOfRound();
                 }
             }
         };
-        playTimer = new Timer(1000, taskPerformed);
+        playTimer = new Timer(playLoopDelay, taskPerformed);
         playTimer.start();
     }
     public void playerPassed() {
         round.nextPlayer();
         passCount++;
     }
-    public void iteratePlayCount() {
+    public void playerPlayed() {
+        round.nextPlayer();
         playCount++;
     }
     public boolean checkPlayerCard(int a) {
@@ -369,17 +347,23 @@ public class Game {
     public void updateMessage(String s) {
         gui.updateMessageLabel(s);
     }
-    public void computerPlay() {
-        System.out.println("Computer choosing card"); //Remove after debugged
+    public void playCard() { 
         Card card = new Card();
         switch(round.getCurrentPosition()) {
+            case 1:
+                System.out.println("Player choosing card"); //Remove after debugged
+                waiting = true;
+                return;
             case 2:
+                System.out.println("Opp 1 choosing card"); //Remove after debugged
                 card = oppTeam.getPlayer1().chooseCard(round.getSuitLed());
                 break;
             case 3:
+                System.out.println("Partner choosing card"); //Remove after debugged
                 card = playerTeam.getPlayer2().chooseCard(round.getSuitLed());
                 break;
             case 4:
+                System.out.println("Opp 2 choosing card"); //Remove after debugged
                 card = oppTeam.getPlayer2().chooseCard(round.getSuitLed());
                 break;
         }
