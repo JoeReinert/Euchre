@@ -33,6 +33,8 @@ public class Game {
         round = new Round(rand.nextInt(4)+1);
         waiting = false;
         state = "Pick it up";
+        passCount = 0;
+        playCount = 0;
     }
     //Accessors
     public Team getPlayerTeam() {
@@ -85,8 +87,6 @@ public class Game {
         gui.redrawTable();
         gui.setVisible(true);
         gui.setAlwaysOnTop(true);
-        passCount = 0;
-        playCount = 0;
         round.getTrick().setTeams(playerTeam, oppTeam);
         passOrPlay();
 
