@@ -167,4 +167,16 @@ public class Player {
         hand.set(a, c);
         System.out.println("Card " + a + " replaced with the " + c.toString()); //Remove after debugging
     }
+    public void jackSwitch(int suit) { //Changes the values of Jack cards of same color as trump suit to top two cards
+        for(int i=0;i<5;i++) {
+            if(hand.get(i).getValue()==2) { //Checks if card is a Jack
+                if(hand.get(i).getSuit()==suit) //Checks if the card matches the trump suit
+                    hand.get(i).setValue(7); //Sets card value to maximum
+                else if(hand.get(i).getSuit() + suit == 4) { //Checks if the card is the same color as trump suit
+                    hand.get(i).setValue(6); //Sets the card value to pentultimate value
+                    hand.get(i).setSuit(suit); //Changes suit to match the trump suit
+                }
+            }
+        }
+    }
 }

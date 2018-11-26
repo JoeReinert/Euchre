@@ -101,6 +101,7 @@ public class Game {
                         firstTimer.stop();
                         state = "Playing"; //State changes for logic in other methods
                         round.setCurrentPosition(round.getLeaderPosition()); //Resets current position to appropriate place
+                        changeJackValues();
                         playLoop();
                     }
                     if(waiting) //Stops timer if player is the one making the choice
@@ -212,8 +213,7 @@ public class Game {
                 break;
             case 4:
                 oppTeam.getPlayer2().discardCard(round.getShownCard(), round.getTrump());
-                break;
-                
+                break;   
         }
         gui.discardDraw();
         gui.newTrumpInfo(round.getTrump());
@@ -370,5 +370,25 @@ public class Game {
         gui.drawComputerPlayedCard(round.getCurrentPosition(),card);
         round.getTrick().playCard(round.getCurrentPosition(),card);
         playerPlayed();
+    }
+    public void changeJackValues() { //Changes the value of Jack cards, if necessary
+        int suit = 0; //Default suit value is Spades
+        switch (round.getTrump()) {
+            case "Diamonds":
+                suit = 1;
+                break;
+            case "Hearts":
+                suit = 2;
+                break;
+            case "Clubs":
+                suit = 3;
+                break;
+            default:
+                break;
+        }
+        playerTeam.getPlayer1().jackSwitch(suit);
+        oppTeam.getPlayer1().jackSwitch(suit);
+        playerTeam.getPlayer2().jackSwitch(suit);
+        oppTeam.getPlayer2().jackSwitch(suit);
     }
 }
