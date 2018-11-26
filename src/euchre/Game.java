@@ -369,6 +369,6 @@ public class Game {
         }
         gui.drawComputerPlayedCard(round.getCurrentPosition(),card);
         round.getTrick().playCard(round.getCurrentPosition(),card);
-        playerPassed();
+        playerPlayed();
     }
 }
