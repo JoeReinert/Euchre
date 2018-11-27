@@ -460,4 +460,31 @@ public class Game {
         playerTeam.getPlayer2().jackSwitch(suit);
         oppTeam.getPlayer2().jackSwitch(suit);
     }
+    public void resetJacks() {
+        int suit = 0; //Default suit value is Spades
+        switch (round.getTrump()) {
+            case "Clubs":
+                suit = 0;
+                break;
+            case "Hearts":
+                suit = 1;
+                break;
+            case "Diamonds":
+                suit = 2;
+                break;
+            case "Spades":
+                suit = 3;
+                break;
+            default:
+                break;
+        }
+        for(int j=0;j<24;j++) {
+            if(deck.get(j).getValue()==7)
+                deck.get(j).setValue(2);
+            else if(deck.get(j).getValue()==6) {
+                deck.get(j).setValue(2);
+                deck.get(j).setSuit(suit);
+            }
+        }
+    }
 }

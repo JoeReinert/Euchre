@@ -178,7 +178,7 @@ public class Player {
                     hand.get(i).setValue(7); //Sets card value to maximum
                     System.out.println("Highest Jack set to proper value"); //Remove after debugging
                 }
-                else if(hand.get(i).getSuit() + suit == 3) { //Checks if the card is the same color as trump suit
+                else if((hand.get(i).getSuit() + suit) == 3) { //Checks if the card is the same color as trump suit
                     hand.get(i).setValue(6); //Sets the card value to pentultimate value
                     hand.get(i).setSuit(suit); //Changes suit to match the trump suit
                     System.out.println("Second highest Jack set to proper value"); //Remove after debugging
