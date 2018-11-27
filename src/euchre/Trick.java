@@ -19,7 +19,9 @@ public class Trick {
     
     //Constructor
     public Trick() {
+        winningCard = null;
         suitLed = "None";
+        leader = null;
     }
     //Mutators
     public void setTeams(Team t1, Team t2) {
@@ -42,6 +44,7 @@ public class Trick {
     public Card getWinningCard() {
         return winningCard;
     }
+    //Methods
     public void playCard(int position, Card c) {
         switch(position) { //Remove this switch case after debugged
             case 1:

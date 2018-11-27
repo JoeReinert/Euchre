@@ -298,7 +298,6 @@ public class Game {
                         if(waiting) { //If the current position is at the player, exit the timer until they have selected a card
                             playTimer.stop(); 
                             gui.updateMessageLabel("Please select a card to play");
-                            return;
                         }
                     }
                     else { //Every player has played a card in the trick
@@ -355,20 +354,38 @@ public class Game {
     }
     public void endOfRound() { //Resets round
         if(playerTeam.getCalledTrump()) { //Determines which team called trump
-            if(playerTeam.getTrickCount()==5) //Player team won all tricks
+            if(playerTeam.getTrickCount()==5) { //Player team won all tricks
                 playerTeam.addToScore(2);
-            else if(playerTeam.getTrickCount()>2) //Player team won a majority of the tricks
+                System.out.println("Your team gets two points");
+                updateMessage("Your team gets two points");
+            }
+            else if(playerTeam.getTrickCount()>2) { //Player team won a majority of the tricks
                 playerTeam.addToScore(1);
-            else //Opposing team won a majority of the tricks
+                System.out.println("Your team gets one point");
+                updateMessage("Your team gets one point");
+            }
+            else { //Opposing team won a majority of the tricks
                 oppTeam.addToScore(2);
+                System.out.println("Opposing team gets two points");
+                updateMessage("Opposing team gets two points");
+            }
         }
         else if(oppTeam.getCalledTrump()){
-            if(oppTeam.getTrickCount()==5) //Opposing team won all tricks
+            if(oppTeam.getTrickCount()==5) { //Opposing team won all tricks
                 oppTeam.addToScore(2);
-            else if(oppTeam.getTrickCount()>2) //Opposing team won a majority of the tricks
+                System.out.println("Opposing team gets two points");
+                updateMessage("Opposing team gets two points");
+            }
+            else if(oppTeam.getTrickCount()>2) { //Opposing team won a majority of the tricks
                 oppTeam.addToScore(1);
-            else //Player team won a majority of the tricks
+                System.out.println("Opposing team gets one point");
+                updateMessage("Opposing team gets one point");
+            }
+            else { //Player team won a majority of the tricks
                 playerTeam.addToScore(2);
+                System.out.println("Your team gets two points");
+                updateMessage("Your team gets two points");
+            }
             
         }
         else { //This occurs if no one calls trump
@@ -424,6 +441,7 @@ public class Game {
     }
     public void changeJackValues() { //Changes the value of Jack cards, if necessary
         int suit = 0; //Default suit value is Spades
+        System.out.println("Using " + round.getTrump() + " as trump");
         switch (round.getTrump()) {
             case "Diamonds":
                 suit = 1;

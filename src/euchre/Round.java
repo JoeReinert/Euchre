@@ -93,6 +93,7 @@ public class Round {
             leaderPosition = 1;
         currentPosition = leaderPosition; //Current position is updated to leader position
         trick.setSuitLed("None"); //Suit led is reset to being empty
+        trick.setTrump("None");
         trumpCalled = false;
     }            
 }
