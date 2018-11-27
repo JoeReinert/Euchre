@@ -149,16 +149,16 @@ public class Player {
         return true; //If no cards match led suit, return true
     }
     public void discardCard(Card c, String trump) { //Logic for computer to select a card to discard
-        System.out.println("Computer Discarding"); //Remove after debugging
         Random rand = new Random();
         switch(difficulty) {
             case 1: //Easy Difficulty
                 hand.set(rand.nextInt(5),c); //Randomly selects a card from computer's hand
                 break;
             case 2: //Normal Difficulty
-                for(int i=0;i<6;i++) { //Starts at lowest value
+                for(int i=0;i<5;i++) { //Starts at lowest value
                     for(int j=0;j<5;j++) { //Checks each card in hand
-                        if(hand.get(j).getValue()==i && !hand.get(j).getSuitString().equals(trump)) { 
+                        if(hand.get(j).getValue()==i && !hand.get(j).getSuitString().equals(trump)) {
+                            System.out.println("Discarding the " + hand.get(j).toString());
                             hand.set(j, c); //If the selected card is the lowest value possible and is not in the trump suit
                             return; //Replace that card with the shown card and return
                         }
@@ -173,11 +173,15 @@ public class Player {
     public void jackSwitch(int suit) { //Changes the values of Jack cards of same color as trump suit to top two cards
         for(int i=0;i<5;i++) {
             if(hand.get(i).getValue()==2) { //Checks if card is a Jack
-                if(hand.get(i).getSuit()==suit) //Checks if the card matches the trump suit
+                System.out.println("Jack found");
+                if(hand.get(i).getSuit()==suit) { //Checks if the card matches the trump suit
                     hand.get(i).setValue(7); //Sets card value to maximum
-                else if(hand.get(i).getSuit() + suit == 4) { //Checks if the card is the same color as trump suit
+                    System.out.println("Highest Jack set to proper value"); //Remove after debugging
+                }
+                else if(hand.get(i).getSuit() + suit == 3) { //Checks if the card is the same color as trump suit
                     hand.get(i).setValue(6); //Sets the card value to pentultimate value
                     hand.get(i).setSuit(suit); //Changes suit to match the trump suit
+                    System.out.println("Second highest Jack set to proper value"); //Remove after debugging
                 }
             }
         }

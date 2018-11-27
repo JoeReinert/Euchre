@@ -14,7 +14,7 @@ public class Team {
     private int score;
     private int trickCount;
     private boolean calledTrump;
-    
+    //Constructors
     public Team(Player p1, Player p2) {
         player1 = p1;
         player2 = p2;
@@ -22,7 +22,7 @@ public class Team {
         trickCount = 0;
         calledTrump = false;
     }
-    
+    //Accessors
     public boolean getCalledTrump() {
         return calledTrump;
     }
@@ -38,6 +38,7 @@ public class Team {
     public int getTrickCount() {
         return trickCount;
     }
+    //Methods
     public void addToScore(int a) {
         score += a;
     }

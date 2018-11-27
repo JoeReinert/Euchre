@@ -16,7 +16,7 @@ public class Round {
     private boolean trumpCalled;
     private Card shownCard;
     private Trick trick;
-    
+    //Constructor
     public Round(int d) {
         trumpCalled = false;
         dealerPosition = d;
@@ -27,7 +27,7 @@ public class Round {
         currentPosition = leaderPosition;
         trick = new Trick();
     }
-    
+    //Mutators
     public void setTrump(String s) {
         trump = s;
         trumpCalled = true;
@@ -47,6 +47,7 @@ public class Round {
     public void setShownCard(Card c) {
         shownCard = c;
     }
+    //Accessors
     public String getTrump() {
         return trump;
     }
@@ -71,6 +72,7 @@ public class Round {
     public Player getTrickWinner() {
         return trick.getWinner();
     }
+    //Methods
     public boolean isTrumpCalled() {
         return trumpCalled;
     }
@@ -89,7 +91,7 @@ public class Round {
         if(leaderPosition>4) //If the dealer is Opponent 2, sets the player as the leader
             leaderPosition = 1;
         currentPosition = leaderPosition; //Current position is updated to leader position
-        trick.setSuitLed(""); //Suit led is reset to being empty
+        trick.setSuitLed("None"); //Suit led is reset to being empty
         trumpCalled = false;
     }            
 }

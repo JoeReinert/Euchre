@@ -12,18 +12,16 @@ package euchre;
 public class Card {
     private int suit, value;
     private final String[] cardSuit = {"Spades", "Diamonds", "Hearts", "Clubs"};
-    private final String[] cardValue = {"9", "10", "Jack", "Queen", "King", "Ace", //2, 3, 4, 5, 6, 7, and 8 are unused in this game
-                                        "Jack", "Jack"};
-
+    private final String[] cardValue = {"9", "10", "Jack", "Queen", "King", "Ace", "Jack", "Jack"};//2, 3, 4, 5, 6, 7, and 8 are unused in this game
+    
+    //Constructors
     public Card() {
     }
-    
-    public Card(int cSuit, int cValue)
-    {
+    public Card(int cSuit, int cValue) {
         suit = cSuit; 
         value = cValue;
-    }
-    
+    } 
+    //Accessors
     public int getSuit() {
         return suit;
     }
@@ -50,14 +48,14 @@ public class Card {
         }
         return null;
     }
-    
+    //Mutators
     public void setSuit(int a) {
         suit = a;
     }
     public void setValue(int a) {
         value = a;
     }
-    
+    //Methods
     public boolean isSameSuit(String s) {
         if (s.equals(""))
             return true;

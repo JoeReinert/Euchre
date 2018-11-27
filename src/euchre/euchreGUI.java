@@ -247,7 +247,7 @@ public class euchreGUI extends javax.swing.JFrame {
             messagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(messagePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(messageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                .addComponent(messageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                 .addContainerGap())
         );
         messagePanelLayout.setVerticalGroup(
@@ -319,7 +319,7 @@ public class euchreGUI extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(suit3Icon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28))
-                            .addComponent(messagePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(messagePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
                         .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(backgroundPanelLayout.createSequentialGroup()
@@ -465,6 +465,10 @@ public class euchreGUI extends javax.swing.JFrame {
         trumpButton.setText("Select Trump");
         disableButtons();
         updateMessageLabel("You have chosen to pass");
+        if(game.getState().equals("Pick it up"))
+            System.out.println("You have chosen to pass");
+        else if(game.getState().equals("Select Trump")) 
+            System.out.println("You have chosen to pass again");
         game.playerPassed();
         game.setWaiting(false);
         game.passOrPlay();
@@ -643,63 +647,61 @@ public class euchreGUI extends javax.swing.JFrame {
         }
     }
     public void cardClicked(int a) {
-        if(game.getState().equals("Playing")) { //Must be in playing phase to play card
-            if(game.checkPlayerCard(a) && !game.getPlayerTeam().getPlayer1().getPlayed(a)) { //Checks to see if card played is correct suit
-                switch(a) {
+        if(game.getWaiting()) { //If currently waiting for player input
+            if(game.getState().equals("Playing")) { //Must be in playing phase to play card
+                if(game.checkPlayerCard(a) && !game.getPlayerTeam().getPlayer1().getPlayed(a)) { //Checks to see if card played is correct suit
+                    switch(a) {
+                        case 0:
+                            playerCard1Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/blank.png")));
+                            break;
+                        case 1:
+                            playerCard2Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/blank.png")));
+                            break;
+                        case 2:
+                            playerCard3Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/blank.png")));
+                            break;
+                        case 3:
+                            playerCard4Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/blank.png")));
+                            break;
+                        case 4:
+                            playerCard5Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/blank.png")));
+                            break;
+                    }
+                    updateMessageLabel("You played the " + game.getPlayerCard(a).toString());
+                    playerPlayedCardIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getPlayerCard(a).getImage())));
+                    game.getRound().getTrick().playCard(1, game.getPlayerTeam().getPlayer1().getCard(a));
+                    game.getPlayerTeam().getPlayer1().removeCard(a);
+                    game.playerPlayed();
+                    game.setWaiting(false);
+                    game.playLoop();
+                }
+                else
+                    updateMessageLabel("Please pick a different card");
+            }
+            else if(game.getState().equals("Discarding")) { //Discarding state
+                switch(a) { //Draws shown card where selected card from hand previously was
                     case 0:
-                        playerCard1Icon.setIcon(null);
-                        playerCard1Icon.setPreferredSize(new java.awt.Dimension(71,96));
+                        playerCard1Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
                         break;
                     case 1:
-                        playerCard2Icon.setIcon(null);
-                        playerCard2Icon.setPreferredSize(new java.awt.Dimension(71,96));
+                        playerCard2Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
                         break;
                     case 2:
-                        playerCard3Icon.setIcon(null);
-                        playerCard3Icon.setPreferredSize(new java.awt.Dimension(71,96));
+                        playerCard3Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
                         break;
                     case 3:
-                        playerCard4Icon.setIcon(null);
-                        playerCard4Icon.setPreferredSize(new java.awt.Dimension(71,96));
+                        playerCard4Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
                         break;
                     case 4:
-                        playerCard5Icon.setIcon(null);
-                        playerCard5Icon.setPreferredSize(new java.awt.Dimension(71,96));
+                        playerCard5Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
                         break;
                 }
-                updateMessageLabel("You played the " + game.getPlayerCard(a).toString());
-                playerPlayedCardIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getPlayerCard(a).getImage())));
-                game.getPlayerTeam().getPlayer1().removeCard(a);
-                game.playerPlayed();
-                game.setWaiting(false);
-                game.playLoop();
+                game.getPlayerTeam().getPlayer1().setCard(game.getRound().getShownCard(), a); //Replaces selected card in hand with shown card on deck
+                discardDraw(); //Redraws shown card as flipped over
+                game.setWaiting(false); //Sets waiting to false so timer can execute
+                game.passOrPlay();
             }
-            else
-                updateMessageLabel("Please pick a different card");
         }
-        else if(game.getState().equals("Discarding")) {
-            switch(a) { //Draws shown card where selected card from hand previously was
-                case 0:
-                    playerCard1Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
-                    break;
-                case 1:
-                    playerCard2Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
-                    break;
-                case 2:
-                    playerCard3Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
-                    break;
-                case 3:
-                    playerCard4Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
-                    break;
-                case 4:
-                    playerCard5Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource(game.getRound().getShownCard().getImage())));
-                    break;
-            }
-            game.getPlayerTeam().getPlayer1().setCard(game.getRound().getShownCard(), a); //Replaces selected card in hand with shown card on deck
-            discardDraw(); //Redraws shown card as flipped over
-            game.setWaiting(false); //Sets waiting to false so timer can execute
-            game.passOrPlay();
-        }   
     }
     public void suitSelected(int a) {
         int trumpSuit = 0;
@@ -755,10 +757,10 @@ public class euchreGUI extends javax.swing.JFrame {
         trumpSuitLabel.setText("Trump");
     }
     public void clearPlayedCards() {
-        playerPlayedCardIcon.setIcon(null);
-        opp1PlayedCardIcon.setIcon(null);
-        partnerPlayedCardIcon.setIcon(null);
-        opp2PlayedCardIcon.setIcon(null);
+        playerPlayedCardIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/blank.png")));
+        opp1PlayedCardIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/blank.png")));
+        partnerPlayedCardIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/blank.png")));
+        opp2PlayedCardIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/blank.png")));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
