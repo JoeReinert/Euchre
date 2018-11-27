@@ -31,6 +31,7 @@ public class Round {
     public void setTrump(String s) {
         trump = s;
         trumpCalled = true;
+        trick.setTrump(s);
     }
     public void setSuitLed(String s) {
         trick.setSuitLed(s);

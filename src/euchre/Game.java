@@ -306,18 +306,22 @@ public class Game {
                         switch(p) {
                             case 1:
                                 playerTeam.takeTrick(); //Player team trick count will increase
+                                System.out.println("You take the trick with the " + round.getTrick().getWinningCard().toString());
                                 gui.updateMessageLabel("You take the trick with the " + round.getTrick().getWinningCard().toString());
                                 break;
                             case 2:
                                 oppTeam.takeTrick(); //Opponent team trick count will increase
+                                System.out.println("Opponent 1 takes the trick with the " + round.getTrick().getWinningCard().toString());
                                 gui.updateMessageLabel("Opponent 1 takes the trick with the " + round.getTrick().getWinningCard().toString());
                                 break;
                             case 3:
                                 playerTeam.takeTrick(); //Player team trick count will increase
+                                System.out.println("Your partner takes the trick with the " + round.getTrick().getWinningCard().toString());
                                 gui.updateMessageLabel("Your partner takes the trick with the " + round.getTrick().getWinningCard().toString());
                                 break;
                             case 4:
                                 oppTeam.takeTrick(); //Opponent team trick count will increase
+                                System.out.println("Opponent 2 takes the trick with the " + round.getTrick().getWinningCard().toString());
                                 gui.updateMessageLabel("Opponent 2 takes the trick with the " + round.getTrick().getWinningCard().toString());
                                 break;
                         }
@@ -374,13 +378,22 @@ public class Game {
         playerTeam.reset();
         oppTeam.reset();
         round.reset();
-        dealCards();
-        gui.updateDealer();
-        gui.redrawTable();
-        passCount = 0;
-        playCount = 0;
-        state = "Pick it up";
-        passOrPlay();
+        gui.updateTrickCounts();
+        if(playerTeam.getScore()<10 && oppTeam.getScore()<10) {
+            dealCards();
+            gui.updateDealer();
+            gui.redrawTable();
+            passCount = 0;
+            playCount = 0;
+            state = "Pick it up";
+            passOrPlay();
+        }
+        else if(playerTeam.getScore()>9) {
+            updateMessage("You win!");
+        }
+        else if(oppTeam.getScore()>9) {
+            updateMessage("You lose... Better luck next time");
+        }
     }
     public void updateMessage(String s) {
         gui.updateMessageLabel(s);
