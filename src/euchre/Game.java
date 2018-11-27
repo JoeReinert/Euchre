@@ -105,6 +105,7 @@ public class Game {
                         state = "Playing"; //State changes for logic in other methods
                         round.setCurrentPosition(round.getLeaderPosition()); //Resets current position to appropriate place
                         changeJackValues();
+                        passCount = 0;
                         playLoop();
                     }
                     if(waiting) //Stops timer if player is the one making the choice
@@ -120,6 +121,7 @@ public class Game {
                         state = "Playing"; //State changes for logic in other methods
                         round.setCurrentPosition(round.getLeaderPosition()); //Resets current position to appropriate place
                         changeJackValues();
+                        passCount = 0;
                         playLoop();
                     }
                     if(waiting) //Stops timer if player is the one making the choice
@@ -294,6 +296,7 @@ public class Game {
             public void actionPerformed(ActionEvent e) {
                 if((playerTeam.getTrickCount() + oppTeam.getTrickCount())<5) { //Checks if 5 tricks have been taken yet, signaling the end of the round
                     if(playCount<4) { //Checks if every player has played in the trick
+                        System.out.println("Play count: " + playCount + " Current Position: " + round.getCurrentPosition());
                         playCard(); //Runs logic for selecting card to play for each player
                         if(waiting) { //If the current position is at the player, exit the timer until they have selected a card
                             playTimer.stop(); 
@@ -391,6 +394,7 @@ public class Game {
         else { //This occurs if no one calls trump
             gui.updateMessageLabel("Everyone passed");
         }
+        resetJacks();
         gui.updateScores();
         playerTeam.reset();
         oppTeam.reset();
