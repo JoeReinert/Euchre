@@ -98,34 +98,25 @@ public class Game {
         ActionListener taskPerformed = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(passCount<4) { //Checks if any player wants to make the shown card's suit the trump suit
-                    if(!round.isTrumpCalled()) //Trump has not been called yet
-                        pickItUpOrPass();
-                    else { //Trump has been called
-                        firstTimer.stop();
-                        state = "Playing"; //State changes for logic in other methods
-                        round.setCurrentPosition(round.getLeaderPosition()); //Resets current position to appropriate place
-                        changeJackValues();
-                        passCount = 0;
-                        playLoop();
-                    }
+                    pickItUpOrPass();
                     if(waiting) //Stops timer if player is the one making the choice
                         firstTimer.stop();
+                    else if(round.isTrumpCalled()) { //Trump has been called
+                        firstTimer.stop();
+                        beginRound();
+                        playLoop();
+                    }
                 }
                 else if(passCount<8) { //Checks if any player wants to call trump
-                    if(!round.isTrumpCalled()) { //Trump has not been called yet
-                        gui.discardDraw(); //Turns over the shown card
-                        selectTrumpOrPass();
-                    }
-                    else { //Trump has been called
-                        firstTimer.stop();
-                        state = "Playing"; //State changes for logic in other methods
-                        round.setCurrentPosition(round.getLeaderPosition()); //Resets current position to appropriate place
-                        changeJackValues();
-                        passCount = 0;
-                        playLoop();
-                    }
+                    gui.discardDraw(); //Turns over the shown card
+                    selectTrumpOrPass();
                     if(waiting) //Stops timer if player is the one making the choice
                         firstTimer.stop();
+                    else if(round.isTrumpCalled()) { //Trump has been called
+                        firstTimer.stop();
+                        beginRound();
+                        playLoop();
+                    }
                 }
                 else { //If no one calls trump, a new round starts
                     firstTimer.stop();
@@ -160,6 +151,7 @@ public class Game {
     }
     public void pickItUpOrPass() { //Logic that determines whether or not the shown card is picked up
         Random rand = new Random(); //Used for random elements below
+        boolean pickingUp = rand.nextInt(10)==0;
         switch(round.getCurrentPosition()) {
             case 1: //Player
                 gui.updateMessageLabel("Please choose to pick it up or pass");
@@ -167,45 +159,41 @@ public class Game {
                 waiting = true;
                 return;
             case 2: //Opponent 1
-                if(rand.nextInt(10)==0) { //10% chance that opponent 1 will tell dealer to pick up shown card
-                    gui.updateMessageLabel("Opponent 1 chose \"Pick-it-up\"");
-                    round.setTrump(round.getShownCard().getSuitString());
-                    oppTeam.calledTrump();
+                if(pickingUp) { //10% chance that opponent 1 will tell dealer to pick up shown card
+                    updateMessage("Opponent 1 chose \"Pick-it-up\"");
                     System.out.println("Opponent 1 chose \"Pick-it-up\""); //Remove after debugged
-                    System.out.println(round.getTrump() + " is trump for the round");
+                    oppTeam.calledTrump();
                     pickItUp();
                     return;
                 }
                 else { //90% chance that opponent 1 will pass
-                    gui.updateMessageLabel("Opponent 1 chose to pass");
+                    updateMessage("Opponent 1 chose to pass");
                     System.out.println("Opponent 1 chose to pass"); //Remove after debugged
                 }
                 break;
             case 3: //Partner
-                if(rand.nextInt(10)==0) { //10% chance that partner will tell dealer to pick up shown card
-                    round.setTrump(round.getShownCard().getSuitString());
-                    gui.updateMessageLabel("Partner chose \"Pick-it-up\"");
+                if(pickingUp) { //10% chance that partner will tell dealer to pick up shown card
+                    updateMessage("Partner chose \"Pick-it-up\"");
                     System.out.println("Partner chose \"Pick-it-up\""); //Remove after debugged
                     playerTeam.calledTrump();
                     pickItUp();
                     return;
                 } 
                 else {//90% chance that partner will pass
-                    gui.updateMessageLabel("Partner chose to pass");
+                    updateMessage("Partner chose to pass");
                     System.out.println("Partner chose to pass"); //Remove after debugged
                 }
                 break;
             case 4: //Opponent 2
-                if(rand.nextInt(10)==0){ //10% chance that opponent 2 will tell dealer to pick up shown card
-                    round.setTrump(round.getShownCard().getSuitString()); 
-                    gui.updateMessageLabel("Opponent 2 chose \"Pick-it-up\"");
+                if(pickingUp){ //10% chance that opponent 2 will tell dealer to pick up shown card 
+                    updateMessage("Opponent 2 chose \"Pick-it-up\"");
                     System.out.println("Opponent 2 chose \"Pick-it-up\""); //Remove after debugged
                     oppTeam.calledTrump();
                     pickItUp();
                     return;
                 }
                 else { //90% chance that opponent 2 will pass
-                    gui.updateMessageLabel("Opponent 2 chose to pass");
+                    updateMessage("Opponent 2 chose to pass");
                     System.out.println("Opponent 2 chose to pass"); //Remove after debugged
                 }
                 break;
@@ -213,9 +201,11 @@ public class Game {
         playerPassed();
     }
     public void pickItUp() { //Logic for getting dealer of the round to discard a card from their hand
+        round.setTrump(round.getShownCard().getSuitString());
+        gui.newTrumpInfo(round.getTrump());
         switch(round.getDealerPosition()) {
             case 1: //Player is the dealer and must discard
-                gui.updateMessageLabel("Please select a card to discard");
+                updateMessage("Please select a card to discard");
                 state = "Discarding";
                 waiting = true;
                 return;
@@ -233,24 +223,23 @@ public class Game {
                 break;   
         }
         gui.discardDraw();
-        gui.newTrumpInfo(round.getTrump());
-        passOrPlay();
     }
     public void selectTrumpOrPass() {//Logic that determines whether or not a trump suit is selected after shown card is discarded
         state = "Select Trump"; //State set for logic purposes in other methods
         Random rand = new Random(); //Used for random elements below
+        boolean selectingTrump = rand.nextInt(10)==0;
         switch(round.getCurrentPosition()) { 
             case 1: //Player
-                gui.updateMessageLabel("Please select a trump suit or pass");
+                updateMessage("Please select a trump suit or pass");
                 gui.enableButtons(); //Enables player buttons to choose
                 waiting = true;
                 return;
             case 2: //Opponent 1
-                if(rand.nextInt(10)==0) {     
+                if(selectingTrump) {     
                     round.setTrump(oppTeam.getPlayer1().selectTrump());
                     oppTeam.calledTrump();
                     gui.newTrumpInfo(round.getTrump());
-                    gui.updateMessageLabel("Opponent 1 chose " + round.getTrump() + " as trump");
+                    updateMessage("Opponent 1 chose " + round.getTrump() + " as trump");
                     System.out.println("Opponent 1 chose " + round.getTrump() + " as trump"); //Remove after debugged                    
                     return;
                 }
@@ -260,30 +249,30 @@ public class Game {
                 }
                 break;
             case 3: //Partner
-                if(rand.nextInt(10)==0) {
+                if(selectingTrump) {
                     round.setTrump(playerTeam.getPlayer2().selectTrump());
                     playerTeam.calledTrump();
                     gui.newTrumpInfo(round.getTrump());
-                    gui.updateMessageLabel("Partner chose " + round.getTrump() + " as trump");
+                    updateMessage("Partner chose " + round.getTrump() + " as trump");
                     System.out.println("Partner chose " + round.getTrump() + " as trump"); //Remove after debugged                    
                     return;
                 } 
                 else {
-                    gui.updateMessageLabel("Partner chose to pass");
+                    updateMessage("Partner chose to pass");
                     System.out.println("Partner chose to pass again"); //Remove after debugged
                 }
                 break;
             case 4: //Opponent 2
-                if(rand.nextInt(10)==0){ 
+                if(selectingTrump){ 
                     round.setTrump(oppTeam.getPlayer2().selectTrump());
                     oppTeam.calledTrump();
                     gui.newTrumpInfo(round.getTrump());
-                    gui.updateMessageLabel("Opponent 2 chose " + round.getTrump() + " as trump");
+                    updateMessage("Opponent 2 chose " + round.getTrump() + " as trump");
                     System.out.println("Opponent 2 chose " + round.getTrump() + " as trump"); //Remove after debugged
                     return;
                 }
                 else {
-                    gui.updateMessageLabel("Opponent 2 chose to pass");
+                    updateMessage("Opponent 2 chose to pass");
                     System.out.println("Opponent 2 chose to pass again"); //Remove after debugged
                 }
                 break;
@@ -490,5 +479,11 @@ public class Game {
                 deck.get(j).setSuit(suit);
             }
         }
+    }
+    public void beginRound() {
+        state = "Playing"; //State changes for logic in other methods
+        round.setCurrentPosition(round.getLeaderPosition()); //Resets current position to appropriate place
+        changeJackValues();
+        passCount = 0;
     }
 }

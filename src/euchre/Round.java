@@ -18,6 +18,7 @@ public class Round {
     private Trick trick;
     //Constructor
     public Round(int d) {
+        trump = "None";
         trumpCalled = false;
         dealerPosition = d;
         if(d<4)
@@ -83,7 +84,7 @@ public class Round {
             currentPosition = 1;
     }
     public void reset() {
-        trump = null; //Trump is set back to null
+        trump = "None"; //Trump is set back to null
         if(dealerPosition<4) //If the dealer is not Opponent 2, increases dealer position by 1
             dealerPosition++;
         else //Else, dealer position is set to Player

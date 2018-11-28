@@ -486,6 +486,8 @@ public class euchreGUI extends javax.swing.JFrame {
             else //If the dealer is the player, set to waiting so they may discard from their hand
                 game.setWaiting(true);
             game.pickItUp();
+            game.beginRound();
+            game.playLoop();
         }
         else { //Player chooses 
             switch(game.getShownCard().getSuit()) {
@@ -750,7 +752,8 @@ public class euchreGUI extends javax.swing.JFrame {
         suit2Icon.setPreferredSize(new java.awt.Dimension(60,60));
         suit2Icon.setPreferredSize(new java.awt.Dimension(60,60));
         newTrumpInfo(game.getRound().getTrump());
-        game.passOrPlay();
+        game.beginRound();
+        game.playLoop();
     }
     public void newTrumpInfo(String suit) {
         trumpSuitIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/euchre/" + suit + ".png")));
