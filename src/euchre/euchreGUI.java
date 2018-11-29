@@ -5,6 +5,10 @@
  */
 package euchre;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
+
 /**
  *
  * @author Joe
@@ -12,6 +16,7 @@ package euchre;
 public class euchreGUI extends javax.swing.JFrame {
 
     private Game game;
+    private Timer discardTimer;
     public euchreGUI() {
         initComponents();
     }
@@ -481,13 +486,30 @@ public class euchreGUI extends javax.swing.JFrame {
             newTrumpInfo(game.getShownCard().getSuitString()); //Shown card suit becomes trump label
             game.getRound().setTrump(game.getShownCard().getSuitString());
             updateMessageLabel("You have chosen \"Pick it up\"");
-            if(game.getRound().getDealerPosition()!=1) //If the dealer is a computer, don't trigger the waiting boolean
+            if(game.getRound().getDealerPosition()!=1) { //If the dealer is a computer, don't trigger the waiting boolean
                 game.setWaiting(false);
-            else //If the dealer is the player, set to waiting so they may discard from their hand
+                game.pickItUp();
+                game.beginRound();
+                game.playLoop();
+            }
+            else { //If the dealer is the player, set to waiting so they may discard from their hand
                 game.setWaiting(true);
-            game.pickItUp();
-            game.beginRound();
-            game.playLoop();
+                game.setPlayerDiscarding(true);
+                game.pickItUp();
+                ActionListener taskPerformed = new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if(!game.getWaiting()) {
+                            discardTimer.stop();
+                            game.beginRound();
+                            game.playLoop();
+                        }
+                        else
+                            System.out.println("Waiting for you to discard");
+                    }
+                };
+                discardTimer = new Timer(2000, taskPerformed);
+                discardTimer.start();
+            }
         }
         else { //Player chooses 
             switch(game.getShownCard().getSuit()) {
@@ -701,7 +723,9 @@ public class euchreGUI extends javax.swing.JFrame {
                 game.getPlayerTeam().getPlayer1().setCard(game.getRound().getShownCard(), a); //Replaces selected card in hand with shown card on deck
                 discardDraw(); //Redraws shown card as flipped over
                 game.setWaiting(false); //Sets waiting to false so timer can execute
-                game.passOrPlay();
+                if(!game.getPlayerDiscarding())
+                    game.passOrPlay();
+                game.setPlayerDiscarding(false);
             }
         }
     }

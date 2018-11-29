@@ -22,6 +22,7 @@ public class Game {
     private Timer firstTimer;
     private Timer playTimer;
     private boolean waiting;
+    private boolean playerDiscarding;
     private String state;
     private int passCount;
     private int playCount;
@@ -32,6 +33,7 @@ public class Game {
         Random rand = new Random();
         round = new Round(rand.nextInt(4)+1);
         waiting = false;
+        playerDiscarding = false;
         state = "Pick it up";
         passCount = 0;
         playCount = 0;
@@ -64,12 +66,18 @@ public class Game {
     public boolean getWaiting() {
         return waiting;
     }
+    public boolean getPlayerDiscarding() {
+        return playerDiscarding;
+    }
     //Mutators
     public void setWaiting(boolean b) {
         waiting = b;
     }
     public void setState(String s) {
         state = s;
+    }
+    public void setPlayerDiscarding(boolean b) {
+        playerDiscarding = b;
     }
     //Methods
     public void startGame(int partnerDifficulty, int opp1Difficulty, int opp2Difficulty) {
