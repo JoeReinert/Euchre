@@ -6,6 +6,11 @@
 
 package euchre;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -103,6 +108,11 @@ public class setupFrame extends javax.swing.JFrame {
 
         rulesButton.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         rulesButton.setText("Rules");
+        rulesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rulesButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout backgroundPanelLayout = new javax.swing.GroupLayout(backgroundPanel);
         backgroundPanel.setLayout(backgroundPanelLayout);
@@ -189,6 +199,18 @@ public class setupFrame extends javax.swing.JFrame {
         this.dispose();
         game.startGame(partnerDif, opp1Dif, opp2Dif);
     }//GEN-LAST:event_startButtonActionPerformed
+
+    private void rulesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rulesButtonActionPerformed
+       try {
+           Desktop.getDesktop().browse(new URL("https://en.wikipedia.org/wiki/Euchre").toURI());
+       } catch (MalformedURLException ex) {
+           Logger.getLogger(setupFrame.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (URISyntaxException ex) {
+           Logger.getLogger(setupFrame.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IOException ex) {
+           Logger.getLogger(setupFrame.class.getName()).log(Level.SEVERE, null, ex);
+       }
+    }//GEN-LAST:event_rulesButtonActionPerformed
 
     /**
      * @param args the command line arguments

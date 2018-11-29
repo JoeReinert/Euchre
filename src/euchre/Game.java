@@ -162,7 +162,7 @@ public class Game {
         boolean pickingUp = rand.nextInt(10)==0;
         switch(round.getCurrentPosition()) {
             case 1: //Player
-                gui.updateMessageLabel("Please choose to pick it up or pass");
+                updateMessage("Please choose to pick it up or pass");
                 gui.enableButtons();
                 waiting = true;
                 return;
@@ -252,7 +252,7 @@ public class Game {
                     return;
                 }
                 else {
-                    gui.updateMessageLabel("Opponent 1 chose to pass");
+                    updateMessage("Opponent 1 chose to pass");
                     System.out.println("Opponent 1 chose to pass again"); //Remove after debugged
                 }
                 break;
@@ -288,7 +288,7 @@ public class Game {
         playerPassed();
     }
     public void playLoop() { //Main loop for the game
-        int playLoopDelay = 2000;
+        int playLoopDelay = 1333;
         ActionListener taskPerformed = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if((playerTeam.getTrickCount() + oppTeam.getTrickCount())<5) { //Checks if 5 tricks have been taken yet, signaling the end of the round
@@ -297,7 +297,7 @@ public class Game {
                         playCard(); //Runs logic for selecting card to play for each player
                         if(waiting) { //If the current position is at the player, exit the timer until they have selected a card
                             playTimer.stop(); 
-                            gui.updateMessageLabel("Please select a card to play");
+                            updateMessage("Please select a card to play");
                         }
                     }
                     else { //Every player has played a card in the trick
@@ -306,22 +306,22 @@ public class Game {
                             case 1:
                                 playerTeam.takeTrick(); //Player team trick count will increase
                                 System.out.println("You take the trick with the " + round.getTrick().getWinningCard().toString());
-                                gui.updateMessageLabel("You take the trick with the " + round.getTrick().getWinningCard().toString());
+                                updateMessage("You take the trick with the " + round.getTrick().getWinningCard().toString());
                                 break;
                             case 2:
                                 oppTeam.takeTrick(); //Opponent team trick count will increase
                                 System.out.println("Opponent 1 takes the trick with the " + round.getTrick().getWinningCard().toString());
-                                gui.updateMessageLabel("Opponent 1 takes the trick with the " + round.getTrick().getWinningCard().toString());
+                                updateMessage("Opponent 1 takes the trick with the " + round.getTrick().getWinningCard().toString());
                                 break;
                             case 3:
                                 playerTeam.takeTrick(); //Player team trick count will increase
-                                System.out.println("Your partner takes the trick with the " + round.getTrick().getWinningCard().toString());
-                                gui.updateMessageLabel("Your partner takes the trick with the " + round.getTrick().getWinningCard().toString());
+                                System.out.println("Partner takes the trick with the " + round.getTrick().getWinningCard().toString());
+                                updateMessage("Partner takes the trick with the " + round.getTrick().getWinningCard().toString());
                                 break;
                             case 4:
                                 oppTeam.takeTrick(); //Opponent team trick count will increase
                                 System.out.println("Opponent 2 takes the trick with the " + round.getTrick().getWinningCard().toString());
-                                gui.updateMessageLabel("Opponent 2 takes the trick with the " + round.getTrick().getWinningCard().toString());
+                                updateMessage("Opponent 2 takes the trick with the " + round.getTrick().getWinningCard().toString());
                                 break;
                         }
                         gui.updateTrickCounts();
@@ -389,7 +389,7 @@ public class Game {
             
         }
         else { //This occurs if no one calls trump
-            gui.updateMessageLabel("Everyone passed");
+            updateMessage("Everyone passed");
         }
         resetJacks();
         gui.updateScores();
@@ -426,14 +426,17 @@ public class Game {
             case 2:
                 System.out.println("Opp 1 choosing card"); //Remove after debugged
                 card = oppTeam.getPlayer1().chooseCard(round.getSuitLed());
+                updateMessage("Opponent 1 played the " + card.toString());
                 break;
             case 3:
                 System.out.println("Partner choosing card"); //Remove after debugged
                 card = playerTeam.getPlayer2().chooseCard(round.getSuitLed());
+                updateMessage("Partner played the " + card.toString());
                 break;
             case 4:
                 System.out.println("Opp 2 choosing card"); //Remove after debugged
                 card = oppTeam.getPlayer2().chooseCard(round.getSuitLed());
+                updateMessage("Opponent 2 played the " + card.toString());
                 break;
         }
         gui.drawComputerPlayedCard(round.getCurrentPosition(),card);

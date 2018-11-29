@@ -107,7 +107,7 @@ public class Player {
                     return card;
                 case 2: //Logic for Normal Difficulty computers
                     //Chooses highest value card possible
-                    int maxValue = 0;
+                    int maxValue = -1;
                     Card maxCard = new Card();
                     for(int i=0;i<tempHand.size();i++) {
                         if(tempHand.get(i).getValue()>maxValue) {
@@ -116,6 +116,7 @@ public class Player {
                         }                            
                     }
                     index = hand.indexOf(maxCard);
+                    System.out.println("Normal Computer attempting to play card #" + index);
                     played[index] = true; //Selects and removes card from hand
                     return maxCard;   
             }
