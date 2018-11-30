@@ -5,8 +5,15 @@
  */
 package euchre;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Timer;
 
 /**
@@ -64,6 +71,7 @@ public class euchreGUI extends javax.swing.JFrame {
         suit3Icon = new javax.swing.JLabel();
         trumpSuitLabel = new javax.swing.JLabel();
         trumpSuitIcon = new javax.swing.JLabel();
+        rulesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Euchre");
@@ -301,6 +309,13 @@ public class euchreGUI extends javax.swing.JFrame {
         trumpSuitIcon.setMinimumSize(new java.awt.Dimension(60, 60));
         trumpSuitIcon.setPreferredSize(new java.awt.Dimension(60, 60));
 
+        rulesButton.setText("Rules");
+        rulesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rulesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout backgroundPanelLayout = new javax.swing.GroupLayout(backgroundPanel);
         backgroundPanel.setLayout(backgroundPanelLayout);
         backgroundPanelLayout.setHorizontalGroup(
@@ -309,7 +324,8 @@ public class euchreGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(rulesButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(partnerLabel)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundPanelLayout.createSequentialGroup()
@@ -391,8 +407,10 @@ public class euchreGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
-                        .addComponent(partnerLabel)
-                        .addGap(10, 10, 10)
+                        .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(partnerLabel)
+                            .addComponent(rulesButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(partnerIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(backgroundPanelLayout.createSequentialGroup()
                         .addComponent(messagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -571,6 +589,18 @@ public class euchreGUI extends javax.swing.JFrame {
     private void suit3IconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_suit3IconMouseClicked
         suitSelected(2);
     }//GEN-LAST:event_suit3IconMouseClicked
+
+    private void rulesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rulesButtonActionPerformed
+        try {
+           Desktop.getDesktop().browse(new URL("https://en.wikipedia.org/wiki/Euchre").toURI());
+       } catch (MalformedURLException ex) {
+           Logger.getLogger(setupFrame.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (URISyntaxException ex) {
+           Logger.getLogger(setupFrame.class.getName()).log(Level.SEVERE, null, ex);
+       } catch (IOException ex) {
+           Logger.getLogger(setupFrame.class.getName()).log(Level.SEVERE, null, ex);
+       } 
+    }//GEN-LAST:event_rulesButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -816,6 +846,7 @@ public class euchreGUI extends javax.swing.JFrame {
     private javax.swing.JLabel playerCard4Icon;
     private javax.swing.JLabel playerCard5Icon;
     private javax.swing.JLabel playerPlayedCardIcon;
+    private javax.swing.JButton rulesButton;
     private javax.swing.JPanel scoreInfoPanel;
     private javax.swing.JLabel suit1Icon;
     private javax.swing.JLabel suit2Icon;
