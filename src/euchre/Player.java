@@ -141,7 +141,7 @@ public class Player {
         return pick;
     }
     public boolean checkCard(int a, String ledSuit) {
-        if(ledSuit.isEmpty() || ledSuit.equals(hand.get(a).getSuitString())) //Checks to see if selected card matches led suit
+        if(ledSuit.isEmpty() || ledSuit.equals(hand.get(a).getSuitString())) //Checks to see if selected card matches led suit or is the first card played
             return true;
         for(int i=0;i<5;i++) { //Checks if any cards in hand match led suit
             if(!played[i] && ledSuit.equals(hand.get(i).getSuitString())) //If any cards not yet played match led suit, returns false

@@ -30,6 +30,8 @@ public class Game {
     public Game(euchreGUI g, Deck d) {
         gui = g;
         deck = d;
+        playerTeam = null;
+        oppTeam = null;
         Random rand = new Random();
         round = new Round(rand.nextInt(4)+1);
         waiting = false;

@@ -26,6 +26,7 @@ public class Round {
         else
             leaderPosition = 1;
         currentPosition = leaderPosition;
+        shownCard = null;
         trick = new Trick();
     }
     //Mutators
